@@ -30,10 +30,10 @@ Seseorang dengan role sebagai user bisa melakukan beberapa hal berikut, yakni ma
 
 ## Alur pengintegrasian dengan web service
 1. Setup Autentikasi pada Django untuk Flutter
-Pertama-tama membuat django-app bernama authentication pada project Django lalu menambahkan authentication ke INSTALLED_APPS pada main project settings.py. Lalu menjalankan pip install django-cors-headers untuk menginstal library yang dibutuhkan.
-Setelah itu, menambahkan corsheaders ke INSTALLED_APPS, corsheaders.middleware.CorsMiddleware, dan beberapa variabel pada main project settings.py. Lalu membuat fungsi view untuk login pada file authentication/views.py, serta pada file authentication/urls.py dan menambahkan URL routing terhadap fungsi yang sudah dibuat.
+Pertama-tama membuat django-app bernama authentication pada project Django lalu menambahkan authentication ke `INSTALLED_APPS` pada main project `settings.py`. Lalu menjalankan `pip install django-cors-headers` untuk menginstal library yang dibutuhkan.
+Setelah itu, menambahkan `corsheaders` ke `INSTALLED_APPS`, `corsheaders.middleware.CorsMiddleware`, dan beberapa variabel pada main project `settings.py`. Lalu membuat fungsi view untuk login pada file `authentication/views.py`, serta pada file `authentication/urls.py` dan menambahkan URL routing terhadap fungsi yang sudah dibuat.
 2. Integrasi Sistem Autentikasi pada Flutter
-Instal package, lalu menggunakan package tersebut dan modifikasi root widget untuk menyediakan CookieRequest library ke semua child widgets dengan menggunakan Provider. Setelah itu, membuat file login.dart pada folder screens.
+Instal package, lalu menggunakan package tersebut dan modifikasi root widget untuk menyediakan CookieRequest library ke semua child widgets dengan menggunakan Provider. Setelah itu, membuat file `login.dart` pada folder `screens`.
 
 ## Tautan berita acara
 https://1drv.ms/x/s!An0ktXnOv5G4nVvoaasFimsAZe9M?e=YJzF3S
