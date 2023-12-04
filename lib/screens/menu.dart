@@ -14,11 +14,19 @@ class MyHomePage extends StatelessWidget {
     
 
    @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Pacil Library',
+=======
+import 'package:flutter/material.dart';
+
+import 'package:bukuku/widgets/left_drawer.dart';
+import 'package:bukuku/screens/shoplist_form.dart';
+
+import 'package:bukuku/widgets/shop_card.dart';
+
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key? key}) : super(key: key);
+
+  @override
+          'BukuKu',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor:  const Color.fromARGB(255, 110, 176, 93),
@@ -26,6 +34,7 @@ class MyHomePage extends StatelessWidget {
       ),
       // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
       drawer: LeftDrawer(id: id,),
+
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
@@ -37,7 +46,8 @@ class MyHomePage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 // Widget Text untuk menampilkan tulisan dengan alignment center dan style yang sesuai
                 child: Text(
-                  'Pacil Library', // Text yang menandakan toko
+                  'BukuKu', // Text yang menandakan toko
+
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -57,6 +67,7 @@ class MyHomePage extends StatelessWidget {
                 children: items.map((ShopItem item) {
                   // Iterasi untuk setiap item
                   return ShopCard(item, id);
+
                 }).toList(),
               ),
             ],
@@ -65,6 +76,11 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
-  
+
 }
- 
+
+final List<ShopItem> items = [
+  ShopItem("Lihat Produk", Icons.checklist),
+  ShopItem("Tambah Produk", Icons.add_shopping_cart),
+  ShopItem("Logout", Icons.logout),
+];

@@ -6,6 +6,7 @@ class LeftDrawer extends StatelessWidget {
   final int id;
   const LeftDrawer({super.key, required this.id});
 
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -41,7 +42,6 @@ class LeftDrawer extends StatelessWidget {
                 ),
               ),
           
-          // TODO: Bagian routing
           ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('Halaman Utama'),
@@ -60,3 +60,4 @@ class LeftDrawer extends StatelessWidget {
     );
   }
 }
+
