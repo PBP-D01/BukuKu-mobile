@@ -1,58 +1,65 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:bukuku/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+// TODO: Impor drawer yang sudah dibuat sebelumnya
+import 'package:bukuku/screens/menu.dart';
+import 'package:bukuku/widgets/left_drawer.dart';
 
-class ShopFormPage extends StatefulWidget {
- final int id;
-  const ShopFormPage({super.key, required this.id});
+class CheckoutFormPage extends StatefulWidget {
+  final int id;
+  const CheckoutFormPage({super.key, required this.id});
+
   @override
-  State<ShopFormPage> createState() => _ShopFormPageState();
+  State<CheckoutFormPage> createState() => _CheckoutFormPageState();
 }
 
-class _ShopFormPageState extends State<ShopFormPage> {
+class _CheckoutFormPageState extends State<CheckoutFormPage> {
   final _formKey = GlobalKey<FormState>();
-  String _name = "";
-  int _price = 0;
-  String _description = "";
-
+  String _firstname = "";
+  String _lastname = "";
+  String _email = "";
+  String _address = "";
   @override
   Widget build(BuildContext context) {
     final int id = widget.id;
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Form Tambah Produk',
+        title: const Center(
+          child: Text(
+            'Checkout',
+          ),
         ),
-        backgroundColor: Colors.indigo,
+        backgroundColor: const Color.fromARGB(255, 110, 176, 93),
         foregroundColor: Colors.white,
       ),
-      drawer: LeftDrawer(id:id),
+      // TODO: Tambahkan drawer yang sudah dibuat di sini
+      drawer: LeftDrawer(id: id),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Nama Produk",
-                    labelText: "Nama Produk",
+                    hintText: "First Name",
+                    labelText: "First Name",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                   onChanged: (String? value) {
                     setState(() {
-                      _name = value!;
+                      _firstname = value!;
                     });
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Nama tidak boleh kosong!";
+                      return "First Name tidak boleh kosong!";
                     }
                     return null;
                   },
@@ -62,23 +69,20 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Harga",
-                    labelText: "Harga",
+                    hintText: "Last Name",
+                    labelText: "Last Name",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                   onChanged: (String? value) {
                     setState(() {
-                      _price = int.parse(value!);
+                      _lastname = value!;
                     });
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Harga tidak boleh kosong!";
-                    }
-                    if (int.tryParse(value) == null) {
-                      return "Harga harus berupa angka!";
+                      return "Last Name tidak boleh kosong!";
                     }
                     return null;
                   },
@@ -88,20 +92,45 @@ class _ShopFormPageState extends State<ShopFormPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Deskripsi",
-                    labelText: "Deskripsi",
+                    hintText: "Email",
+                    labelText: "Email",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
                   onChanged: (String? value) {
                     setState(() {
-                      _description = value!;
+                      // TODO: Tambahkan variabel yang sesuai
+                      _email = value!;
                     });
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Deskripsi tidak boleh kosong!";
+                      return "Email tidak boleh kosong!";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Address",
+                    labelText: "Address",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onChanged: (String? value) {
+                    setState(() {
+                      // TODO: Tambahkan variabel yang sesuai
+                      _address = value!;
+                    });
+                  },
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return "Address tidak boleh kosong!";
                     }
                     return null;
                   },
@@ -113,10 +142,38 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 110, 176, 93)),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        final response = await request.postJson(
+                            "http://127.0.0.1:8000/checkout-flutter/",
+                            jsonEncode(<String, String>{
+                              'first name': _firstname,
+                              'last name': _lastname,
+                              'email': _email,
+                              'address': _address,
+                              // TODO: Sesuaikan field data sesuai dengan aplikasimu
+                            }));
+
+                        if (response['status'] == 'success') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Item baru berhasil disimpan!"),
+                          ));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyHomePage(id: id)),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text("Terdapat kesalahan, silakan coba lagi."),
+                          ));
+                        }
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -126,9 +183,10 @@ class _ShopFormPageState extends State<ShopFormPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Nama: $_name'),
-                                    Text('Harga: $_price'),
-                                    Text('Deskripsi: $_description'),
+                                    Text('First Name: $_firstname'),
+                                    Text('Last Name: $_lastname'),
+                                    Text('Email: $_email'),
+                                    Text('Address: $_address'),
                                   ],
                                 ),
                               ),
