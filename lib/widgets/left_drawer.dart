@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bukuku/screens/menu.dart';
+import 'package:bukuku/screens/checkout_form.dart';
 
 
 class LeftDrawer extends StatelessWidget {
@@ -15,12 +16,12 @@ class LeftDrawer extends StatelessWidget {
           const DrawerHeader(
             // TODO: Bagian drawer header
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 175, 128, 196),
+                  color: Color.fromARGB(255, 110, 176, 93),
                 ),
                 child: Column(
                   children: [
                     Text(
-                      'Pacil Library',
+                      'BukuKu',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 30,
@@ -54,7 +55,18 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
-        
+        ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Checkout'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CheckoutFormPage(id:id),
+                  ));
+            },
+          ),
         ],
       ),
     );
