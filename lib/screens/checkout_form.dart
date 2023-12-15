@@ -137,7 +137,7 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                 ),
               ),
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
