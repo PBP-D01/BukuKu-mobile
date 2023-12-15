@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bukuku/screens/menu.dart';
-import 'package:bukuku/screens/checkout_form.dart';
+import 'package:bukuku/checkout/screens/checkout_form.dart';
 
 
 class LeftDrawer extends StatelessWidget {
