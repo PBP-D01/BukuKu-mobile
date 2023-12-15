@@ -138,8 +138,8 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
                               decoration: InputDecoration(
-                                hintText: "Address",
-                                labelText: "Address",
+                                hintText: "Shipping Address",
+                                labelText: "Shipping Address",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
