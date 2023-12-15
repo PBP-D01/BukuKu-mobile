@@ -1,3 +1,4 @@
+import 'package:bukuku/screens/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bukuku/screens/menu.dart';
 
@@ -51,6 +52,18 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(id:id),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.local_library_outlined),
+            title: const Text('Cari Produk'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookPage(),
                   ));
             },
           ),
