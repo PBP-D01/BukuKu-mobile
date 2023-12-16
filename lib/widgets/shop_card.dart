@@ -17,7 +17,7 @@ class ShopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Color.fromARGB(255, 110, 176, 93),
+      color: const Color.fromARGB(255, 110, 176, 93),
       child: InkWell(
         // Area responsive terhadap sentuhan
         onTap: () {

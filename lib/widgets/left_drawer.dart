@@ -1,7 +1,7 @@
+import 'package:bukuku/screens/cart.dart';
+import 'package:bukuku/screens/checkout_form.dart';
 import 'package:flutter/material.dart';
 import 'package:bukuku/screens/menu.dart';
-import 'package:bukuku/checkout/screens/checkout_form.dart';
-
 
 class LeftDrawer extends StatelessWidget {
   final int id;
@@ -31,7 +31,7 @@ class LeftDrawer extends StatelessWidget {
                     ),
                     Padding(padding: EdgeInsets.all(10)),
                     Text(
-                    "Catat seluruh keperluan belanjamu di sini!",
+                    "Beli buku di BukuKu!",
                     style: TextStyle(
                       fontSize: 15,      // Ukuran font 15
                       color: Colors.white,  // Warna teks putih
@@ -55,7 +55,19 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
-        ListTile(
+          ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Cart'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartPage(id:id),
+                  ));
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('Checkout'),
             // Bagian redirection ke MyHomePage
@@ -63,10 +75,11 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CheckoutFormPage(id:id),
+                    builder: (context) => CheckoutFormPage(id:id, cartItems: [],),
                   ));
             },
           ),
+        
         ],
       ),
     );

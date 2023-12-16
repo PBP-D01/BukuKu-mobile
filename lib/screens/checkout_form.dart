@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bukuku/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +8,8 @@ import 'package:bukuku/widgets/left_drawer.dart';
 
 class CheckoutFormPage extends StatefulWidget {
   final int id;
-  const CheckoutFormPage({super.key, required this.id});
+  final List<Cart> cartItems;
+  const CheckoutFormPage({Key? key, required this.id, required this.cartItems}) : super(key: key);
 
   @override
   State<CheckoutFormPage> createState() => _CheckoutFormPageState();
@@ -55,7 +57,7 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                       style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green
+                        color: Colors.green,
                       ),
                     ),
                   ),
@@ -157,91 +159,95 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                               },
                             ),
                           ),
+                          // Display the cart items
+                        ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.cartItems.length,
+                  itemBuilder: (context, index) {
+                    var cartItem = widget.cartItems[index];
+                    return ListTile(
+                      title: Text(cartItem.bookTitle),
+                      subtitle: Text('Quantity: ${cartItem.bookAmount}'),
+                      // Add more details as needed
+                    );
+                  },
+                ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Align(
                               alignment: Alignment.bottomCenter,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                  const Color.fromARGB(255, 110, 176, 93),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 110, 176, 93),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    final response = await request.postJson(
+                                      "https://bukuku-d01-tk.pbp.cs.ui.ac.id/checkout/checkout_flutter/",
+                                      jsonEncode(<String, String>{
+                                        'first_name': _firstname,
+                                        'last_name': _lastname,
+                                        'email': _email,
+                                        'address': _address,
+                                      }),
+                                    );
+
+                                    if (response['status'] == 'success') {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Checkout berhasil!",
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Terdapat kesalahan, silakan coba lagi.",
+                                          ),
+                                        ),
+                                      );
+                                    }
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                            'Checkout berhasil!',
+                                          ),
+                                          content: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                                Text('Detail pembayaran dapat dilihat pada ($_email)'),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('OK'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    _formKey.currentState!.reset();
+                                  }
+                                },
+                                child: const Text(
+                                  "Checkout",
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final response = await request.postJson(
-                                    "https://bukuku-d01-tk.pbp.cs.ui.ac.id/checkout/checkout_flutter/",
-                                    jsonEncode(<String, String>{
-                                      'first_name': _firstname,
-                                      'last_name': _lastname,
-                                      'email': _email,
-                                      'address': _address,
-                                    }),
-                                  );
-
-                                
-                                  if (response['status'] == 'success') {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Checkout berhasil!",
-                                        ),
-                                      ),
-                                    );
-                                    // Navigator.pushReplacement(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         MyHomePage(id: id),
-                                    //   ),
-                                    // );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Terdapat kesalahan, silakan coba lagi.",
-                                        ),
-                                      ),
-                                    );
-                                  }
-
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          'Checkout berhasil!',
-                                        ),
-                                        content: SingleChildScrollView(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text('Terima kasih sudah melakukan pembelian, $_firstname.'),
-                                              Text('Detail pembayaran dapat dilihat pada ($_email)'),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('OK'),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                  _formKey.currentState!.reset();
-                                }
-                              },
-                              child: const Text(
-                                "Checkout",
-                                style: TextStyle(color: Colors.white),
-                              ),
                             ),
-                          ),
                           ),
                         ],
                       ),
