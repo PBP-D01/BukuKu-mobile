@@ -1,8 +1,16 @@
+import 'package:bukuku/models/cart_model.dart';
 import 'package:bukuku/widgets/cart_card.dart';
+import 'package:bukuku/widgets/left_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CartPage extends StatefulWidget {
+  final int id;
+
+  const CartPage({super.key, required this.id});
   @override
+  // ignore: library_private_types_in_public_api
   _CartPageState createState() => _CartPageState();
 }
 
@@ -11,24 +19,44 @@ class _CartPageState extends State<CartPage> {
   late int _totalAmount;
   late double _totalPrice;
 
+  Future<List<Cart>> fetchItem() async {
+    final int id = widget.id;
+
+    var url = Uri.parse('http://127.0.0.1:8000/cart/get-cart-flutter/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    _totalAmount = 0;
+    _totalPrice = 0.0;
+
+    List<Cart> listCart = [];
+    for (var d in data) {
+      if (d != null && d['user'] == id) {
+        Cart cart = Cart.fromJson(d);
+        listCart.add(cart);
+
+        _totalAmount += cart.bookAmount;
+        _totalPrice += cart.bookPrice * cart.bookAmount;
+      }
+    }
+
+    return listCart;
+  }
+
   @override
   void initState() {
     super.initState();
-    _totalAmount = 4;
-    _totalPrice = 100.0;
+    _totalAmount = 0;
+    _totalPrice = 0.0;
   }
 
-  void incrementTotal() {
+  void refreshCart() {
     setState(() {
-      _totalAmount++;
-      // _totalPrice = _totalPrice * _totalAmount;
-    });
-  }
-
-  void decrementTotal() {
-    setState(() {
-      _totalAmount--;
-      // _totalPrice = _totalPrice * _totalAmount;
+      fetchItem();
     });
   }
 
@@ -43,73 +71,109 @@ class _CartPageState extends State<CartPage> {
         backgroundColor: const Color.fromARGB(255, 110, 176, 93),
         foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Replace the following with your actual search bar widget
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Cari buku Anda...',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 30.0),
-            // Replace the following with your actual cart details widget
-            CartCard(
-              title: 'Book Title',
-              author: 'Author Name',
-              imageURL:
-                  'https://m.media-amazon.com/images/I/713KZTsaYpL._AC_UY218_.jpg',
-              amount: 2,
-              price: 25.0,
-              onRemove: () {
-                // Implement the logic to remove the item from the cart
-              },
-              onDecrease: decrementTotal,
-              onIncrease: incrementTotal,
-            ),
-            CartCard(
-              title: 'Book Title',
-              author: 'Author Name',
-              imageURL:
-                  'https://m.media-amazon.com/images/I/713KZTsaYpL._AC_UY218_.jpg',
-              amount: 2,
-              price: 25.0,
-              onRemove: () {
-                // Implement the logic to remove the item from the cart
-              },
-              onDecrease: decrementTotal,
-              onIncrease: incrementTotal,
-            ),
+      drawer: LeftDrawer(id: widget.id),
+      body: FutureBuilder(
+          future: fetchItem(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              if (!snapshot.hasData) {
+                return const Column(
+                  children: [
+                    Text(
+                      "Tidak ada data produk.",
+                      style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Replace the following with your actual search bar widget
+                        const TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Cari buku Anda...',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 30.0),
 
-            Card(
-              elevation: 3.0,
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              child: Container(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Details",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        _totalAmount.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        _totalPrice.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ]),
-              ),
-            ),
-            // Add the rest of your UI widgets here
-          ],
-        ),
-      ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            var cartItem = snapshot.data![index];
+                            return CartCard(
+                              id: cartItem.id,
+                              title: cartItem.bookTitle,
+                              author: cartItem.bookAuthor,
+                              imageURL: cartItem.bookImg,
+                              amount: cartItem.bookAmount,
+                              price: cartItem.bookPrice,
+                              refreshCart: refreshCart,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 50.0),
+                        Card(
+                          elevation: 3.0,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Details",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Quantity",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        _totalAmount.toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Total",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        'Rp. ${(15000 * (_totalPrice)).toStringAsFixed(0)}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        // Add the rest of your UI widgets here
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+          }),
     );
   }
 }
