@@ -9,7 +9,8 @@ import 'package:bukuku/widgets/left_drawer.dart';
 class CheckoutFormPage extends StatefulWidget {
   final int id;
   final List<Cart> cartItems;
-  const CheckoutFormPage({Key? key, required this.id, required this.cartItems}) : super(key: key);
+  const CheckoutFormPage({Key? key, required this.id, required this.cartItems})
+      : super(key: key);
 
   @override
   State<CheckoutFormPage> createState() => _CheckoutFormPageState();
@@ -160,18 +161,19 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                             ),
                           ),
                           // Display the cart items
-                        ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.cartItems.length,
-                  itemBuilder: (context, index) {
-                    var cartItem = widget.cartItems[index];
-                    return ListTile(
-                      title: Text(cartItem.bookTitle),
-                      subtitle: Text('Quantity: ${cartItem.bookAmount}'),
-                      // Add more details as needed
-                    );
-                  },
-                ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: widget.cartItems.length,
+                            itemBuilder: (context, index) {
+                              var cartItem = widget.cartItems[index];
+                              return ListTile(
+                                title: Text(cartItem.bookTitle),
+                                subtitle:
+                                    Text('Quantity: ${cartItem.bookAmount}'),
+                                // Add more details as needed
+                              );
+                            },
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Align(
@@ -195,7 +197,8 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                     );
 
                                     if (response['status'] == 'success') {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
                                           content: Text(
                                             "Checkout berhasil!",
@@ -203,7 +206,8 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                         ),
                                       );
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
                                           content: Text(
                                             "Terdapat kesalahan, silakan coba lagi.",
@@ -221,10 +225,13 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                           ),
                                           content: SingleChildScrollView(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text('Terima kasih sudah melakukan pembelian, $_firstname.'),
-                                                Text('Detail pembayaran dapat dilihat pada ($_email)'),
+                                                Text(
+                                                    'Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                                Text(
+                                                    'Detail pembayaran dapat dilihat pada ($_email)'),
                                               ],
                                             ),
                                           ),
