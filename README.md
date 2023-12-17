@@ -1,6 +1,5 @@
 # Bukuku
-
-https://build.appcenter.ms/v0.1/apps/6c513354-5490-4a91-98a2-c38ebe083294/branches/main/badge
+![Markdown](https://build.appcenter.ms/v0.1/apps/6c513354-5490-4a91-98a2-c38ebe083294/branches/main/badge)
 
 ## Kelompok D01
 - Oey Joshua Jodrian (2206041953)
