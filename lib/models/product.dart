@@ -9,17 +9,20 @@ List<Product> productFromJson(String str) => List<Product>.from(json.decode(str)
 String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
+
     Model model;
     int pk;
     Fields fields;
 
     Product({
+
         required this.model,
         required this.pk,
         required this.fields,
     });
 
     factory Product.fromJson(Map<String, dynamic> json) => Product(
+
         model: modelValues.map[json["model"]]!,
         pk: json["pk"],
         fields: Fields.fromJson(json["fields"]),

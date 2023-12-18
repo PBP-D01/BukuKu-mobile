@@ -1,12 +1,15 @@
+import 'package:bukuku/screens/cart.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:bukuku/models/product.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:bukuku/widgets/left_drawer.dart';
 
 class BookPage extends StatefulWidget {
-  const BookPage({Key? key}) : super(key: key);
+  final int id;
+  const BookPage({super.key, required this.id});
 
   @override
   _BookPageState createState() => _BookPageState();
@@ -17,6 +20,7 @@ class _BookPageState extends State<BookPage> {
   String dropdownValue = 'Title';
 
   Future<List<Product>> fetchProducts() async {
+    final int id = widget.id;
     var url = Uri.parse('http://127.0.0.1:8000/api/books/');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
@@ -25,10 +29,37 @@ class _BookPageState extends State<BookPage> {
     List<Product> listProducts = [];
     for (var d in data) {
       if (d != null) {
-        listProducts.add(Product.fromJson(d));
+        Product product = Product.fromJson(d);
+        listProducts.add(product);
       }
     }
     return listProducts;
+  }
+
+  Future<void> addToCart(int bookId) async {
+    final int id = widget.id;
+    final String apiUrl =
+        'http://127.0.0.1:8000/product_page/add_cart_flutter/';
+    final Map<String, dynamic> requestData = {'user_id': id, 'id': bookId};
+    print('masukkkk $bookId');
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode == 201) {
+        print('Buku ditambahkan ke keranjang!');
+      } else {
+        print(
+            'Gagal menambahkan buku ke keranjang. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -74,6 +105,7 @@ class _BookPageState extends State<BookPage> {
 
   @override
   Widget build(BuildContext context) {
+    final int id = widget.id;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -95,6 +127,7 @@ class _BookPageState extends State<BookPage> {
           ),
         ),
       ),
+      drawer: LeftDrawer(id: id),
       body: Column(
         children: [
           Padding(
@@ -141,8 +174,21 @@ class _BookPageState extends State<BookPage> {
                     );
                   }).toList(),
                 ),
+                ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(id:id)));
+                },
+                child: Text(
+                  'Cart',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green,
+                ),
+              ),
               ],
             ),
+            
           ),
           Expanded(
             child: GridView.builder(
@@ -153,7 +199,11 @@ class _BookPageState extends State<BookPage> {
               ),
               itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
-                return BookCard(product: filteredProducts[index]);
+                return BookCard(
+                  product: filteredProducts[index],
+                  id: id,
+                  addToCartCallback: addToCart,
+                );
               },
             ),
           ),
@@ -164,9 +214,16 @@ class _BookPageState extends State<BookPage> {
 }
 
 class BookCard extends StatelessWidget {
+  final int id;
   final Product product;
+  final Function(int) addToCartCallback;
 
-  const BookCard({Key? key, required this.product}) : super(key: key);
+  const BookCard(
+      {Key? key,
+      required this.product,
+      required this.id,
+      required this.addToCartCallback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +237,7 @@ class BookCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            height: 200, 
+            height: 200,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
@@ -197,33 +254,38 @@ class BookCard extends StatelessWidget {
             child: Flexible(
               child: Text(
                 product.fields.title,
-                style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+                style: const TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),
             ),
-            ),
-          Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Flexible(
-            child: Text(
-              product.fields.author,
-              style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-            ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Flexible(
+              child: Text(
+                product.fields.author,
+                style: const TextStyle(
+                    fontSize: 12.0, fontWeight: FontWeight.normal),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               product.fields.publishedDate.year.toString(),
-              style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal),
+              style: const TextStyle(
+                  fontSize: 12.0, fontWeight: FontWeight.normal),
               textAlign: TextAlign.center,
             ),
-            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
@@ -241,7 +303,7 @@ class BookCard extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()))
+                  addToCartCallback(product.pk);
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.green,
@@ -253,7 +315,6 @@ class BookCard extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => Review()));
                 },
                 child: Text(
@@ -267,7 +328,7 @@ class BookCard extends StatelessWidget {
             ],
           ),
         ],
-        ),
+      ),
     );
   }
 }

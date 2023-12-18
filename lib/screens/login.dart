@@ -1,4 +1,5 @@
 import 'package:bukuku/screens/menu.dart';
+import 'package:bukuku/screens/product_page.dart';
 import 'package:bukuku/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart' show CookieRequest;
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   int id = response['id'];
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage(id: id)),
+                    MaterialPageRoute(builder: (context) => BookPage(id: id)),
                   );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
