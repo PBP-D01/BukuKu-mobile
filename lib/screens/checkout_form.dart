@@ -1,14 +1,17 @@
 import 'dart:convert';
+import 'package:bukuku/models/cart_model.dart';
+import 'package:bukuku/screens/cart.dart';
+import 'package:bukuku/widgets/cart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-// TODO: Impor drawer yang sudah dibuat sebelumnya
-import 'package:bukuku/screens/menu.dart';
 import 'package:bukuku/widgets/left_drawer.dart';
+import 'package:http/http.dart' as http;
 
 class CheckoutFormPage extends StatefulWidget {
   final int id;
-  const CheckoutFormPage({super.key, required this.id});
+
+  const CheckoutFormPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<CheckoutFormPage> createState() => _CheckoutFormPageState();
@@ -20,10 +23,48 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
   String _lastname = "";
   String _email = "";
   String _address = "";
+  List<Cart> cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCartItems();
+  }
+
+  void refreshCart() {
+    setState(() {
+      fetchCartItems();
+    });
+  }
+
+  Future<void> fetchCartItems() async {
+    final int id = widget.id;
+    final request = context.read<CookieRequest>();
+
+    var url = Uri.parse(
+        'https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/get-cart-flutter/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    cartItems = [];
+    for (var d in data) {
+      if (d != null && d['user'] == id) {
+        Cart cart = Cart.fromJson(d);
+        cartItems.add(cart);
+      }
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final int id = widget.id;
     final request = context.watch<CookieRequest>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -33,186 +74,251 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
         ),
         backgroundColor: const Color.fromARGB(255, 110, 176, 93),
         foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CartPage(id: id),
+              ),
+            );
+          },
+        ),
       ),
-      // TODO: Tambahkan drawer yang sudah dibuat di sini
       drawer: LeftDrawer(id: id),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "First Name",
-                    labelText: "First Name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      _firstname = value!;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "First Name tidak boleh kosong!";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Last Name",
-                    labelText: "Last Name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      _lastname = value!;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "Last Name tidak boleh kosong!";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Email",
-                    labelText: "Email",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      // TODO: Tambahkan variabel yang sesuai
-                      _email = value!;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "Email tidak boleh kosong!";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Address",
-                    labelText: "Address",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  onChanged: (String? value) {
-                    setState(() {
-                      // TODO: Tambahkan variabel yang sesuai
-                      _address = value!;
-                    });
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return "Address tidak boleh kosong!";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 110, 176, 93)),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        final response = await request.postJson(
-                            "http://127.0.0.1:8000/checkout-flutter/",
-                            jsonEncode(<String, String>{
-                              'first name': _firstname,
-                              'last name': _lastname,
-                              'email': _email,
-                              'address': _address,
-                              // TODO: Sesuaikan field data sesuai dengan aplikasimu
-                            }));
-
-                        if (response['status'] == 'success') {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Item baru berhasil disimpan!"),
-                          ));
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyHomePage(id: id)),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content:
-                                Text("Terdapat kesalahan, silakan coba lagi."),
-                          ));
-                        }
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Buku berhasil tersimpan'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('First Name: $_firstname'),
-                                    Text('Last Name: $_lastname'),
-                                    Text('Email: $_email'),
-                                    Text('Address: $_address'),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left Section: Cart Items
+            Container(
+              width:
+                  MediaQuery.of(context).size.width * 0.5, // Adjust as needed
+              child: cartItems.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Your cart is empty.',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        var cartItem = cartItems[index];
+                        return CartCard(
+                          id: cartItem.id,
+                          title: cartItem.bookTitle,
+                          author: cartItem.bookAuthor,
+                          imageURL: cartItem.bookImg,
+                          amount: cartItem.bookAmount,
+                          price: cartItem.bookPrice,
+                          refreshCart: refreshCart,
                         );
-                        _formKey.currentState!.reset();
-                      }
-                    },
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(color: Colors.white),
+                      },
                     ),
-                  ),
+            ),
+            // Right Section: Checkout Form
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Checkout Form',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "First Name",
+                                  labelText: "First Name",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _firstname = value!;
+                                  });
+                                },
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "First Name cannot be empty!";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Last Name",
+                                  labelText: "Last Name",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _lastname = value!;
+                                  });
+                                },
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Last Name cannot be empty!";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Email",
+                                  labelText: "Email",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _email = value!;
+                                  });
+                                },
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Email cannot be empty!";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Shipping Address",
+                                  labelText: "Shipping Address",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                ),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _address = value!;
+                                  });
+                                },
+                                validator: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Address cannot be empty!";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 110, 176, 93),
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final response = await request.postJson(
+                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/checkout/checkout_flutter/",
+                              jsonEncode(<String, String>{
+                                'first_name': _firstname,
+                                'last_name': _lastname,
+                                'email': _email,
+                                'address': _address,
+                              }),
+                            );
+
+                            if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Checkout berhasil!",
+                                  ),
+                                ),
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'Checkout berhasil!',
+                                    ),
+                                    content: SingleChildScrollView(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              'Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                          Text(
+                                              'Detail pembayaran dapat dilihat pada ($_email)'),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              _formKey.currentState!.reset();
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Terdapat kesalahan, silakan coba lagi.",
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text(
+                          "Continue to Checkout",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
