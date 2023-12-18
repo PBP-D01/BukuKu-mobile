@@ -56,7 +56,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.home_outlined),
+            leading: const Icon(Icons.shopping_cart),
             title: const Text('Cart'),
             // Bagian redirection ke MyHomePage
             onTap: () {
@@ -68,14 +68,14 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.home_outlined),
+            leading: const Icon(Icons.shopping_cart_checkout),
             title: const Text('Checkout'),
             // Bagian redirection ke MyHomePage
             onTap: () {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CheckoutFormPage(id:id, cartItems: [],),
+                    builder: (context) => CheckoutFormPage(id:id,),
                   ));
             },
           ),
