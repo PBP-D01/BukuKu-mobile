@@ -94,7 +94,8 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
           children: [
             // Left Section: Cart Items
             Container(
-              width: MediaQuery.of(context).size.width * 0.5, // Adjust as needed
+              width:
+                  MediaQuery.of(context).size.width * 0.5, // Adjust as needed
               child: cartItems.isEmpty
                   ? Center(
                       child: Text(
@@ -278,9 +279,9 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                              'Terima kasih sudah melakukan pembelian, $_firstname.'),
                                           Text(
-                                            'Detail pembayaran dapat dilihat pada ($_email)'),
+                                              'Detail pembayaran dapat dilihat pada ($_email)'),
                                         ],
                                       ),
                                     ),
