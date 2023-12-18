@@ -1,20 +1,3 @@
-import 'package:bukuku/widgets/card.dart';
-import 'package:bukuku/widgets/left_drawer.dart';
-import 'package:flutter/material.dart';
-
-
-class MyHomePage extends StatelessWidget {
-    final int id;
-    MyHomePage({Key? key, required this.id}) : super(key: key);
-    final List<ShopItem> items = [
-    ShopItem("Lihat Item", Icons.checklist, const Color.fromARGB(255, 195, 146, 224)),
-    ShopItem("Tambah Item", Icons.add_shopping_cart, const Color.fromARGB(255, 135, 97, 157)),
-    ShopItem("Logout", Icons.logout,Color.fromARGB(255, 101, 70, 118)),
-];
-    
-
-   @override
-=======
 import 'package:flutter/material.dart';
 
 import 'package:bukuku/widgets/left_drawer.dart';
@@ -23,9 +6,14 @@ import 'package:bukuku/screens/shoplist_form.dart';
 import 'package:bukuku/widgets/shop_card.dart';
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
-
+   final int id;
+    MyHomePage({Key? key, required this.id}) : super(key: key);
+   
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
           'BukuKu',
           style: TextStyle(color: Colors.white),
         ),

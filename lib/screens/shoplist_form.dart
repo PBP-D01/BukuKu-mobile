@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:bukuku/widgets/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class ShopFormPage extends StatefulWidget {
-  const ShopFormPage({super.key});
-
+ final int id;
+  const ShopFormPage({super.key, required this.id});
   @override
   State<ShopFormPage> createState() => _ShopFormPageState();
 }
@@ -16,6 +18,8 @@ class _ShopFormPageState extends State<ShopFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final int id = widget.id;
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -25,7 +29,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      drawer: const LeftDrawer(),
+      drawer: LeftDrawer(id:id),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -117,7 +121,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Produk berhasil tersimpan'),
+                              title: const Text('Buku berhasil tersimpan'),
                               content: SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

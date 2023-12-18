@@ -1,0 +1,180 @@
+import 'package:bukuku/models/cart_model.dart';
+import 'package:bukuku/widgets/cart_card.dart';
+import 'package:bukuku/widgets/left_drawer.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class CartPage extends StatefulWidget {
+  final int id;
+
+  const CartPage({super.key, required this.id});
+  @override
+  // ignore: library_private_types_in_public_api
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  // Add necessary state variables and functions here
+  late int _totalAmount;
+  late double _totalPrice;
+
+  Future<List<Cart>> fetchItem() async {
+    final int id = widget.id;
+
+    var url = Uri.parse(
+        'https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/get-cart-flutter/');
+    var response = await http.get(
+      url,
+      headers: {"Content-Type": "application/json"},
+    );
+
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    _totalAmount = 0;
+    _totalPrice = 0.0;
+
+    List<Cart> listCart = [];
+    for (var d in data) {
+      if (d != null && d['user'] == id) {
+        Cart cart = Cart.fromJson(d);
+        listCart.add(cart);
+
+        _totalAmount += cart.bookAmount;
+        _totalPrice += cart.bookPrice * cart.bookAmount;
+      }
+    }
+
+    return listCart;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _totalAmount = 0;
+    _totalPrice = 0.0;
+  }
+
+  void refreshCart() {
+    setState(() {
+      fetchItem();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'BukuKu',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color.fromARGB(255, 110, 176, 93),
+        foregroundColor: Colors.white,
+      ),
+      drawer: LeftDrawer(id: widget.id),
+      body: FutureBuilder(
+          future: fetchItem(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              if (!snapshot.hasData) {
+                return const Column(
+                  children: [
+                    Text(
+                      "Tidak ada data produk.",
+                      style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Replace the following with your actual search bar widget
+                        const TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Cari buku Anda...',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 30.0),
+
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            var cartItem = snapshot.data![index];
+                            return CartCard(
+                              id: cartItem.id,
+                              title: cartItem.bookTitle,
+                              author: cartItem.bookAuthor,
+                              imageURL: cartItem.bookImg,
+                              amount: cartItem.bookAmount,
+                              price: cartItem.bookPrice,
+                              refreshCart: refreshCart,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 50.0),
+                        Card(
+                          elevation: 3.0,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Details",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Quantity",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        _totalAmount.toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Total",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        'Rp. ${(15000 * (_totalPrice)).toStringAsFixed(0)}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        // Add the rest of your UI widgets here
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+          }),
+    );
+  }
+}

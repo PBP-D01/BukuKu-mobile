@@ -2,11 +2,7 @@ import 'package:bukuku/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:bukuku/screens/login.dart';
 
-=======
-import 'package:bukuku/screens/menu.dart';
-// /Users/joshuajodrian/repos/flutter/bin
 void main() {
   runApp(const MyApp());
 }

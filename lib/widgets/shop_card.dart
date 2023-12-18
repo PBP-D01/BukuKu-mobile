@@ -10,13 +10,14 @@ class ShopItem {
 
 class ShopCard extends StatelessWidget {
   final ShopItem item;
+  final int id;
 
-  const ShopCard(this.item, {super.key}); // Constructor
+  const ShopCard(this.item, this.id, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.indigo,
+      color: const Color.fromARGB(255, 110, 176, 93),
       child: InkWell(
         // Area responsive terhadap sentuhan
         onTap: () {
@@ -24,7 +25,7 @@ class ShopCard extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ShopFormPage(),
+                  builder: (context) => ShopFormPage(id:id),
                 ));
           } else {
             ScaffoldMessenger.of(context)

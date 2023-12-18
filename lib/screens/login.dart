@@ -1,7 +1,7 @@
 import 'package:bukuku/screens/menu.dart';
 import 'package:bukuku/screens/register.dart';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart' show CookieRequest;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 void main() {
