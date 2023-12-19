@@ -3,20 +3,20 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:bukuku/screens/login.dart';
 
-class ShopItem {
+class LogoutItem {
   final String name;
   final IconData icon;
   final Color color;
 
-  ShopItem(this.name, this.icon, this.color);
+  LogoutItem(this.name, this.icon, this.color);
 }
 
-class ShopCard extends StatelessWidget {
-  final ShopItem item;
+class LogoutCard extends StatelessWidget {
+  final LogoutItem item;
 
   final int id;
 
-  const ShopCard(this.item, this.id, {super.key});
+  const LogoutCard(this.item, this.id, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +31,7 @@ class ShopCard extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
                 content: Text("Kamu telah menekan tombol ${item.name}!")));
-          if (item.name == "Tambah Item") {
-            // TODO: Gunakan Navigator.push untuk melakukan navigasi ke MaterialPageRoute yang mencakup ShopFormPage.
-          } else if (item.name == "Lihat Item") {
-          } else if (item.name == "Logout") {
+          if  (item.name == "Logout") {
             final response = await request.logout(
                 // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
                 "https://bukuku-d01-tk.pbp.cs.ui.ac.id/auth/logout/");

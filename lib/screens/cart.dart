@@ -1,5 +1,5 @@
 import 'package:bukuku/models/cart_model.dart';
-import 'package:bukuku/screens/checkout_form.dart';
+import 'package:bukuku/screens/checkout.dart';
 import 'package:bukuku/screens/product_page.dart';
 import 'package:bukuku/widgets/cart_card.dart';
 import 'package:bukuku/widgets/left_drawer.dart';
@@ -24,7 +24,7 @@ class _CartPageState extends State<CartPage> {
   Future<List<Cart>> fetchItem() async {
     final int id = widget.id;
 
-    var url = Uri.parse('http://127.0.0.1:8000/cart/get-cart-flutter/');
+    var url = Uri.parse('https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/get-cart-flutter/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},

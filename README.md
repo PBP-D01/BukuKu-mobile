@@ -15,7 +15,7 @@ https://install.appcenter.ms/orgs/d01/apps/bukuku/distribution_groups/d01
 Aplikasi "BukuKu" terinspirasi dari kebutuhan akan platform online shop yang menjual berbagai kategori buku. Aplikasi ini menghadirkan beragam pilihan buku yang diminati oleh berbagai kalangan pembaca. Dengan mengelompokkan buku ke dalam kategori yang berbeda, BukuKu memudahkan pelanggan untuk menemukan buku yang sesuai dengan minat mereka tanpa harus melakukan pencarian manual. BukuKu juga memberikan pengalaman berbelanja buku yang lebih menyenangkan dengan rekomendasi buku berdasarkan preferensi pembaca, menjadikannya tujuan utama bagi pecinta buku lokal dan internasional.
 
 ## Daftar Modul
-1. Home Page, Login, Register (Semua) <br> 
+1. Login, Register, Logout (Semua) <br> 
 2. Leaderboard Page (Jojo) <br>
 Pada halaman ini, user dapat melihat peringkat buku dengan penjualan terbanyak berdasarkan banyak pembelian unik. 
 3. Product Page (Kayzaa) <br>
