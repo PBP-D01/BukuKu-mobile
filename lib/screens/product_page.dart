@@ -21,7 +21,7 @@ class _BookPageState extends State<BookPage> {
 
   Future<List<Product>> fetchProducts() async {
     final int id = widget.id;
-    var url = Uri.parse('http://127.0.0.1:8000/api/books/');
+    var url = Uri.parse('https://bukuku-d01-tk.pbp.cs.ui.ac.id/api/books/');
     var response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 
@@ -39,9 +39,9 @@ class _BookPageState extends State<BookPage> {
   Future<void> addToCart(int bookId) async {
     final int id = widget.id;
     final String apiUrl =
-        'http://127.0.0.1:8000/product_page/add_cart_flutter/';
+        'https://bukuku-d01-tk.pbp.cs.ui.ac.id/product_page/add_cart_flutter/';
     final Map<String, dynamic> requestData = {'user_id': id, 'id': bookId};
-    print('masukkkk $bookId');
+    //print('masukkkk $bookId');
     try {
       final http.Response response = await http.post(
         Uri.parse(apiUrl),
@@ -251,7 +251,6 @@ class BookCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Flexible(
               child: Text(
                 product.fields.title,
                 style: const TextStyle(
@@ -262,11 +261,9 @@ class BookCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),
-            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Flexible(
               child: Text(
                 product.fields.author,
                 style: const TextStyle(
@@ -275,7 +272,6 @@ class BookCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),
-            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),

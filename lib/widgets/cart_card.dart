@@ -121,7 +121,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onPressed: () async {
                           final response = await request.postJson(
-                              "http://127.0.0.1:8000/cart/delete-cart-flutter/",
+                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/delete-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                               }));
@@ -161,7 +161,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onPressed: () async {
                           final response = await request.postJson(
-                              "http://127.0.0.1:8000/cart/decrease-cart-flutter/",
+                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/decrease-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                               }));
@@ -205,7 +205,7 @@ class _CartCardState extends State<CartCard> {
                             newAmount = _amount;
                           }
                           final response = await request.postJson(
-                              "http://127.0.0.1:8000/cart/edit-cart-flutter/",
+                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/edit-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                                 'amount': newAmount,
@@ -253,7 +253,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onPressed: () async {
                           final response = await request.postJson(
-                              "http://127.0.0.1:8000/cart/increase-cart-flutter/",
+                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/increase-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                               }));

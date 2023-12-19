@@ -1,6 +1,7 @@
 import 'package:bukuku/screens/cart.dart';
-import 'package:bukuku/screens/checkout_form.dart';
+import 'package:bukuku/screens/checkout.dart';
 import 'package:bukuku/screens/leaderboard.dart';
+import 'package:bukuku/widgets/card.dart';
 import 'package:flutter/material.dart';
 import 'package:bukuku/screens/menu.dart';
 import 'package:bukuku/screens/product_page.dart';
@@ -42,18 +43,6 @@ class LeftDrawer extends StatelessWidget {
                 )
               ],
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home_outlined),
-            title: const Text('Halaman Utama'),
-            // Bagian redirection ke MyHomePage
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyHomePage(id: id),
-                  ));
-            },
           ),
           ListTile(
             leading: const Icon(Icons.leaderboard),
@@ -102,6 +91,18 @@ class LeftDrawer extends StatelessWidget {
                       id: id,
                       // cartItems: [],
                     ),
+                  ));
+            },
+          ),
+           ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyHomePage(id: id),
                   ));
             },
           ),

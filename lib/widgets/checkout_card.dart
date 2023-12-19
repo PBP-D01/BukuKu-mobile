@@ -79,11 +79,12 @@ class _CheckoutCardState extends State<CheckoutCard> {
                         fontWeight: FontWeight.normal, color: Colors.green),
                   ),
                   Text('Author: ${widget.author}'),
+                  Text("Quantity: ${widget.amount}"),
                   Text(
                     'Rp. ${(15000 * (widget.price * _amount)).toStringAsFixed(0)}',
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.green),
-                  ),
+                  ),          
                 ],
               ),
             ),
