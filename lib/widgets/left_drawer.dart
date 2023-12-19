@@ -56,7 +56,30 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.home_outlined),
+            leading: const Icon(Icons.leaderboard),
+            title: const Text('Leaderboard'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LeaderboardPage(id: id)));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.local_library_outlined),
+            title: const Text('Cari Produk'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookPage(id: id),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart),
             title: const Text('Cart'),
             // Bagian redirection ke MyHomePage
             onTap: () {
@@ -68,19 +91,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.local_library_outlined),
-            title: const Text('Cari Produk'),
-            // Bagian redirection ke MyHomePage
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BookPage(id:id),
-                  ));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.home_outlined),
+            leading: const Icon(Icons.shopping_cart_checkout),
             title: const Text('Checkout'),
             // Bagian redirection ke MyHomePage
             onTap: () {
@@ -92,17 +103,6 @@ class LeftDrawer extends StatelessWidget {
                       // cartItems: [],
                     ),
                   ));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.home_outlined),
-            title: const Text('Leaderboard'),
-            // Bagian redirection ke MyHomePage
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LeaderboardPage(id: id)));
             },
           ),
         ],
