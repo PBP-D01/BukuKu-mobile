@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:bukuku/models/cart_model.dart';
 import 'package:bukuku/screens/cart.dart';
-import 'package:bukuku/widgets/cart_card.dart';
+import 'package:bukuku/widgets/checkout_card.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -108,14 +108,13 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                       itemCount: cartItems.length,
                       itemBuilder: (context, index) {
                         var cartItem = cartItems[index];
-                        return CartCard(
+                        return CheckoutCard(
                           id: cartItem.id,
                           title: cartItem.bookTitle,
                           author: cartItem.bookAuthor,
                           imageURL: cartItem.bookImg,
                           amount: cartItem.bookAmount,
                           price: cartItem.bookPrice,
-                          refreshCart: refreshCart,
                         );
                       },
                     ),
@@ -297,6 +296,7 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 },
                               );
                               _formKey.currentState!.reset();
+                              refreshCart();
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

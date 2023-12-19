@@ -35,7 +35,6 @@ class CartCard extends StatefulWidget {
 
 class _CartCardState extends State<CartCard> {
   late int _amount;
-  late CartPage cartPage;
   final TextEditingController _amountController = TextEditingController();
 
   @override
@@ -122,7 +121,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onPressed: () async {
                           final response = await request.postJson(
-                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/delete-cart-flutter/",
+                              "http://127.0.0.1:8000/cart/delete-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                               }));
@@ -162,7 +161,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onPressed: () async {
                           final response = await request.postJson(
-                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/decrease-cart-flutter/",
+                              "http://127.0.0.1:8000/cart/decrease-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                               }));
@@ -206,7 +205,7 @@ class _CartCardState extends State<CartCard> {
                             newAmount = _amount;
                           }
                           final response = await request.postJson(
-                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/edit-cart-flutter/",
+                              "http://127.0.0.1:8000/cart/edit-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                                 'amount': newAmount,
@@ -254,7 +253,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onPressed: () async {
                           final response = await request.postJson(
-                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/increase-cart-flutter/",
+                              "http://127.0.0.1:8000/cart/increase-cart-flutter/",
                               jsonEncode(<String, int>{
                                 'id': widget.id,
                               }));

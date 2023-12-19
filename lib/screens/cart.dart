@@ -1,4 +1,6 @@
 import 'package:bukuku/models/cart_model.dart';
+import 'package:bukuku/screens/checkout_form.dart';
+import 'package:bukuku/screens/product_page.dart';
 import 'package:bukuku/widgets/cart_card.dart';
 import 'package:bukuku/widgets/left_drawer.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +24,7 @@ class _CartPageState extends State<CartPage> {
   Future<List<Cart>> fetchItem() async {
     final int id = widget.id;
 
-    var url = Uri.parse(
-        'http://127.0.0.1:8000/cart/get-cart-flutter/');
+    var url = Uri.parse('http://127.0.0.1:8000/cart/get-cart-flutter/');
     var response = await http.get(
       url,
       headers: {"Content-Type": "application/json"},
@@ -65,8 +66,9 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
-          'BukuKu',
+          'Cart',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color.fromARGB(255, 110, 176, 93),
@@ -144,7 +146,12 @@ class _CartPageState extends State<CartPage> {
                                                 const Color.fromARGB(
                                                     255, 110, 176, 93))),
                                     onPressed: () {
-                                      // Handle button press
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BookPage(id: widget.id)),
+                                      );
                                     },
                                     child: const Text(
                                       'Mulai Belanja',
@@ -238,7 +245,13 @@ class _CartPageState extends State<CartPage> {
                                                     const Color.fromARGB(
                                                         255, 110, 176, 93))),
                                         onPressed: () {
-                                          // Handle button press
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CheckoutFormPage(
+                                                        id: widget.id)),
+                                          );
                                         },
                                         child: const Text(
                                           'Place Order',
@@ -297,7 +310,12 @@ class _CartPageState extends State<CartPage> {
                                         Color>(
                                     const Color.fromARGB(255, 110, 176, 93))),
                             onPressed: () {
-                              // Handle button press
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BookPage(id: widget.id)),
+                              );
                             },
                             child: const Text(
                               'Tambahkan Item',
