@@ -1,9 +1,8 @@
+import 'package:bukuku/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bukuku/widgets/left_drawer.dart';
-import 'package:bukuku/screens/shoplist_form.dart';
 
-import 'package:bukuku/widgets/shop_card.dart';
 
 class MyHomePage extends StatelessWidget {
    final int id;
@@ -52,9 +51,9 @@ class MyHomePage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                children: items.map((ShopItem item) {
+                children: items.map((LogoutItem item) {
                   // Iterasi untuk setiap item
-                  return ShopCard(item, id);
+                  return LogoutCard(item, id);
 
                 }).toList(),
               ),
@@ -67,8 +66,6 @@ class MyHomePage extends StatelessWidget {
 
 }
 
-final List<ShopItem> items = [
-  ShopItem("Lihat Produk", Icons.checklist),
-  ShopItem("Tambah Produk", Icons.add_shopping_cart),
-  ShopItem("Logout", Icons.logout),
+final List<LogoutItem> items = [
+  LogoutItem("Logout", Icons.logout,Color.fromARGB(255, 110, 176, 93) ),
 ];

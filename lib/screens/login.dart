@@ -1,7 +1,8 @@
 import 'package:bukuku/screens/menu.dart';
+import 'package:bukuku/screens/product_page.dart';
 import 'package:bukuku/screens/register.dart';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart' show CookieRequest;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Untuk menyambungkan Android emulator dengan Django pada localhost,
                 // gunakan URL http://10.0.2.2/
                 final response = await request.login(
-                    "http://127.0.0.1:8000/auth/login/", {
+                    "https://bukuku-d01-tk.pbp.cs.ui.ac.id/auth/login/", {
                   'username': username,
                   'password': password,
                 });
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   int id = response['id'];
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage(id: id)),
+                    MaterialPageRoute(builder: (context) => BookPage(id: id)),
                   );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()

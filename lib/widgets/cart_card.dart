@@ -35,7 +35,6 @@ class CartCard extends StatefulWidget {
 
 class _CartCardState extends State<CartCard> {
   late int _amount;
-  late CartPage cartPage;
   final TextEditingController _amountController = TextEditingController();
 
   @override
