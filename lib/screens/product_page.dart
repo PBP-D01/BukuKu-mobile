@@ -53,7 +53,7 @@ class _BookPageState extends State<BookPage> {
       );
 
       if (response.statusCode == 201) {
-        print('Buku ditambahkan ke keranjang!');
+        showSnackbar("Berhasil ditambahkan ke keranjang!", context, true);
       } else {
         print(
             'Gagal menambahkan buku ke keranjang. Status: ${response.statusCode}');
@@ -61,6 +61,20 @@ class _BookPageState extends State<BookPage> {
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  Future<void> showSnackbar(
+      String message, BuildContext context, bool success) async {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: success ? Colors.green : Colors.red,
+      duration: Duration(seconds: 1),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -153,6 +167,13 @@ class _BookPageState extends State<BookPage> {
                         dropdownValue = newValue;
                       });
                     }
+                    if (newValue == 'Author') {
+                      showSnackbar("Mencari berdasarkan author", context, true);
+                    } else if (newValue == "Title") {
+                      showSnackbar("Mencari berdasarkan judul", context, true);
+                    } else if (newValue == "Year") {
+                      showSnackbar("Mencari berdasarkan tahun", context, true);
+                    }
                   },
                   items: <String>['Title', 'Author', 'Year']
                       .map<DropdownMenuItem<String>>((String value) {
@@ -176,20 +197,20 @@ class _BookPageState extends State<BookPage> {
                   }).toList(),
                 ),
                 ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartPage(id:id)));
-                },
-                child: Text(
-                  'Cart',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CartPage(id: id)));
+                  },
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.green,
+                    size: 24,
+                  ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                ),
-              ),
               ],
             ),
-            
           ),
           Expanded(
             child: GridView.builder(
@@ -197,6 +218,7 @@ class _BookPageState extends State<BookPage> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
+                childAspectRatio: 0.5,
               ),
               itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
@@ -252,27 +274,27 @@ class BookCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-              child: Text(
-                product.fields.title,
-                style: const TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
+            child: Text(
+              product.fields.title,
+              style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-              child: Text(
-                product.fields.author,
-                style: const TextStyle(
-                    fontSize: 12.0, fontWeight: FontWeight.normal),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
+            child: Text(
+              product.fields.author,
+              style: const TextStyle(
+                  fontSize: 12.0, fontWeight: FontWeight.normal),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -286,7 +308,7 @@ class BookCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-              '\$${product.fields.price}',
+              '\Rp ${(15000 * (product.fields.price)).toStringAsFixed(0)}}',
               style: const TextStyle(
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold,
@@ -312,7 +334,12 @@ class BookCard extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewPage(id: product.pk,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ReviewPage(
+                                id: product.pk,
+                              )));
                 },
                 child: Text(
                   'Review',
