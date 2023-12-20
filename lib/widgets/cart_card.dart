@@ -250,7 +250,7 @@ class _CartCardState extends State<CartCard> {
                           color: Colors.green,
                         ),
                         onPressed: () async {
-                          if (_amount != 99) {
+                          if (_amount < 100) {
                             final response = await request.postJson(
                                 "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/increase-cart-flutter/",
                                 jsonEncode(<String, int>{
