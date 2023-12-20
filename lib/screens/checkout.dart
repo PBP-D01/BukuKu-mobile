@@ -261,7 +261,12 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 const SnackBar(
                                   content: Text(
                                     "Checkout berhasil!",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 1)),
                                   ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 110, 176, 93),
                                 ),
                               );
 
@@ -306,7 +311,12 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 const SnackBar(
                                   content: Text(
                                     "Terdapat kesalahan, silakan coba lagi.",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 1)),
                                   ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 110, 176, 93),
                                 ),
                               );
                             }

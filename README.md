@@ -17,7 +17,7 @@ Aplikasi "BukuKu" terinspirasi dari kebutuhan akan platform online shop yang men
 ## Daftar Modul
 1. Login, Register, Logout (Semua) <br> 
 2. Leaderboard Page (Jojo) <br>
-Pada halaman ini, user dapat melihat peringkat buku dengan penjualan terbanyak berdasarkan banyak pembelian unik. 
+Pada halaman ini, user dapat melihat peringkat buku dengan penjualan terbanyak berdasarkan banyak pembelian unik. User juga dapat menambahkan dan melihat comment section mengenai leaderboard.
 3. Product Page (Kayzaa) <br>
 Pada halaman ini, user dapat melihat detail produk yang spesifik,mencakup informasi seperti gambar produk, deskripsi, harga, dan opsi untuk menambahkannya ke keranjang belanja.
 4. Cart Page (Hery) <br>
