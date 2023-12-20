@@ -1,4 +1,5 @@
 import 'package:bukuku/screens/cart.dart';
+import 'package:bukuku/screens/review.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -311,7 +312,7 @@ class BookCard extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Review()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewPage(id: product.pk,)));
                 },
                 child: Text(
                   'Review',
