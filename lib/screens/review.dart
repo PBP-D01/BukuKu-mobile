@@ -48,7 +48,6 @@ class _ReviewPageState extends State<ReviewPage> {
     final int id = widget.id;
     final int user_id = widget.user_id;
     final String apiUrl = 'https://bukuku-d01-tk.pbp.cs.ui.ac.id/review/api/$id/post/review/';
-        //'https://bukuku-d01-tk.pbp.cs.ui.ac.id/review/api/$id/post/review/';
     final Map<String, dynamic> requestData = {'text': text, 'rating': rating, 'user_id': user_id,};
     
     try {
@@ -60,8 +59,9 @@ class _ReviewPageState extends State<ReviewPage> {
         body: jsonEncode(requestData),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         print('Review berhasil dikirim!');
+        setState(() {});
       } else {
         print(
             'Gagal menambahkan review. Status: ${response.statusCode}');
@@ -266,7 +266,6 @@ class _ReviewPageState extends State<ReviewPage> {
                               child: Text('Kirim Review'),
                               onPressed: () async {
                                 postReview(controllerText.text, int.parse(controllerRating.text));
-                                setState(() {});
                                 Navigator.of(context).pop();
                               },
                             ),
