@@ -1,10 +1,13 @@
+// ignore_for_file: unnecessary_string_interpolations, use_build_context_synchronously
+
 import 'package:bukuku/screens/cart.dart';
 import 'package:bukuku/screens/checkout.dart';
 import 'package:bukuku/screens/leaderboard.dart';
-import 'package:bukuku/widgets/card.dart';
+import 'package:bukuku/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'package:bukuku/screens/menu.dart';
 import 'package:bukuku/screens/product_page.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class LeftDrawer extends StatelessWidget {
   final int id;
@@ -12,6 +15,7 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Drawer(
       child: ListView(
         children: [
@@ -94,16 +98,38 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
-           ListTile(
+          ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
             // Bagian redirection ke MyHomePage
-            onTap: () {
-              Navigator.pushReplacement(
+            onTap: () async {
+              final response = await request
+                  .logout("https://bukuku-d01-tk.pbp.cs.ui.ac.id/auth/logout/");
+              String message = response["message"];
+              if (response['status']) {
+                String uname = response["username"];
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    "$message Sampai jumpa, $uname.",
+                    style: const TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 1)),
+                  ),
+                  backgroundColor: const Color.fromARGB(255, 110, 176, 93),
+                ));
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => MyHomePage(id: id),
-                  ));
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    "$message",
+                    style: const TextStyle(
+                        color: Color.fromRGBO(255, 255, 255, 1)),
+                  ),
+                  backgroundColor: const Color.fromARGB(255, 110, 176, 93),
+                ));
+              }
             },
           ),
         ],
