@@ -312,7 +312,7 @@ class BookCard extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  //Navigator.push(context,MaterialPageRoute(builder: (context) => ReviewPage(id: id, book_id: product.pk)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewPage(id: product.pk,)));
                 },
                 child: Text(
                   'Review',
