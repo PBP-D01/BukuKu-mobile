@@ -1,10 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-
-import 'package:bukuku/screens/cart.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +32,6 @@ class CartCard extends StatefulWidget {
 
 class _CartCardState extends State<CartCard> {
   late int _amount;
-  late CartPage cartPage;
   final TextEditingController _amountController = TextEditingController();
 
   @override
@@ -202,37 +198,38 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onSubmitted: (value) async {
                           int newAmount = int.tryParse(value) ?? _amount;
-                          if (newAmount <= 0) {
+                          if (newAmount <= 0 || newAmount > 10) {
                             newAmount = _amount;
-                          }
-                          final response = await request.postJson(
-                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/edit-cart-flutter/",
-                              jsonEncode(<String, int>{
-                                'id': widget.id,
-                                'amount': newAmount,
-                              }));
-                          if (response['status'] == 'success') {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                "Item amount successfully changed.",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              duration: Duration(milliseconds: 400),
-                              backgroundColor:
-                                  Color.fromARGB(255, 110, 176, 93),
-                            ));
                           } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                "Action failed, please try again.",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              duration: Duration(milliseconds: 400),
-                              backgroundColor:
-                                  Color.fromARGB(255, 110, 176, 93),
-                            ));
+                            final response = await request.postJson(
+                                "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/edit-cart-flutter/",
+                                jsonEncode(<String, int>{
+                                  'id': widget.id,
+                                  'amount': newAmount,
+                                }));
+                            if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text(
+                                  "Item amount successfully changed.",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: Duration(milliseconds: 400),
+                                backgroundColor:
+                                    Color.fromARGB(255, 110, 176, 93),
+                              ));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text(
+                                  "Action failed, please try again.",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: Duration(milliseconds: 400),
+                                backgroundColor:
+                                    Color.fromARGB(255, 110, 176, 93),
+                              ));
+                            }
                           }
                           setState(() {
                             _amount = newAmount;
@@ -253,35 +250,37 @@ class _CartCardState extends State<CartCard> {
                           color: Colors.green,
                         ),
                         onPressed: () async {
-                          final response = await request.postJson(
-                              "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/increase-cart-flutter/",
-                              jsonEncode(<String, int>{
-                                'id': widget.id,
-                              }));
-                          if (response['status'] == 'success') {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                "Item amount successfully increase.",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              duration: Duration(milliseconds: 400),
-                              backgroundColor:
-                                  Color.fromARGB(255, 110, 176, 93),
-                            ));
-                          } else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                "Action failed, please try again.",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              duration: Duration(milliseconds: 400),
-                              backgroundColor:
-                                  Color.fromARGB(255, 110, 176, 93),
-                            ));
+                          if (_amount < 10) {
+                            final response = await request.postJson(
+                                "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/increase-cart-flutter/",
+                                jsonEncode(<String, int>{
+                                  'id': widget.id,
+                                }));
+                            if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text(
+                                  "Item amount successfully increase.",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: Duration(milliseconds: 400),
+                                backgroundColor:
+                                    Color.fromARGB(255, 110, 176, 93),
+                              ));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text(
+                                  "Action failed, please try again.",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                duration: Duration(milliseconds: 400),
+                                backgroundColor:
+                                    Color.fromARGB(255, 110, 176, 93),
+                              ));
+                            }
+                            _increment();
                           }
-                          _increment();
                         },
                       ),
                     ],

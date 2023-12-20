@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:bukuku/models/cart_model.dart';
 import 'package:bukuku/screens/cart.dart';
-import 'package:bukuku/widgets/cart_card.dart';
+import 'package:bukuku/widgets/checkout_card.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -108,14 +108,13 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                       itemCount: cartItems.length,
                       itemBuilder: (context, index) {
                         var cartItem = cartItems[index];
-                        return CartCard(
+                        return CheckoutCard(
                           id: cartItem.id,
                           title: cartItem.bookTitle,
                           author: cartItem.bookAuthor,
                           imageURL: cartItem.bookImg,
                           amount: cartItem.bookAmount,
                           price: cartItem.bookPrice,
-                          refreshCart: refreshCart,
                         );
                       },
                     ),
@@ -262,9 +261,18 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 const SnackBar(
                                   content: Text(
                                     "Checkout berhasil!",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 1)),
                                   ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 110, 176, 93),
                                 ),
                               );
+
+                              // Store values before showDialog
+                              String firstName = _firstname;
+                              String email = _email;
 
                               showDialog(
                                 context: context,
@@ -279,9 +287,9 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              'Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                              'Terima kasih sudah melakukan pembelian, $firstName.'),
                                           Text(
-                                              'Detail pembayaran dapat dilihat pada ($_email)'),
+                                              'Detail pembayaran dapat dilihat pada ($email).'),
                                         ],
                                       ),
                                     ),
@@ -297,12 +305,18 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 },
                               );
                               _formKey.currentState!.reset();
+                              refreshCart();
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
                                     "Terdapat kesalahan, silakan coba lagi.",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 1)),
                                   ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 110, 176, 93),
                                 ),
                               );
                             }

@@ -42,7 +42,7 @@ class Leaderboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
     Future<List<BookLeaderboard>> data = request
-        .get("http://127.0.0.1:8000/leaderboard/get_leaderboard_flutter/")
+        .get("https://bukuku-d01-tk.pbp.cs.ui.ac.id/leaderboard/get_leaderboard_flutter/")
         .then((value) {
       if (value == null) {
         return [];
