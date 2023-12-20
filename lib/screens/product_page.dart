@@ -308,7 +308,7 @@ class BookCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-              '\Rp ${(15000 * (product.fields.price)).toStringAsFixed(0)}}',
+              '\Rp ${(15000 * (product.fields.price)).toStringAsFixed(0)}',
               style: const TextStyle(
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold,
