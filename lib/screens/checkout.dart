@@ -261,9 +261,18 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 const SnackBar(
                                   content: Text(
                                     "Checkout berhasil!",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 1)),
                                   ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 110, 176, 93),
                                 ),
                               );
+
+                              // Store values before showDialog
+                              String firstName = _firstname;
+                              String email = _email;
 
                               showDialog(
                                 context: context,
@@ -278,9 +287,9 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              'Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                              'Terima kasih sudah melakukan pembelian, $firstName.'),
                                           Text(
-                                              'Detail pembayaran dapat dilihat pada ($_email)'),
+                                              'Detail pembayaran dapat dilihat pada ($email).'),
                                         ],
                                       ),
                                     ),
@@ -302,7 +311,12 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 const SnackBar(
                                   content: Text(
                                     "Terdapat kesalahan, silakan coba lagi.",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 255, 255, 1)),
                                   ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 110, 176, 93),
                                 ),
                               );
                             }
