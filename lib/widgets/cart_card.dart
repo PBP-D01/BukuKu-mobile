@@ -198,7 +198,7 @@ class _CartCardState extends State<CartCard> {
                         ),
                         onSubmitted: (value) async {
                           int newAmount = int.tryParse(value) ?? _amount;
-                          if (newAmount <= 0 || newAmount > 100) {
+                          if (newAmount <= 0 || newAmount > 10) {
                             newAmount = _amount;
                           } else {
                             final response = await request.postJson(
@@ -250,7 +250,7 @@ class _CartCardState extends State<CartCard> {
                           color: Colors.green,
                         ),
                         onPressed: () async {
-                          if (_amount < 100) {
+                          if (_amount < 10) {
                             final response = await request.postJson(
                                 "https://bukuku-d01-tk.pbp.cs.ui.ac.id/cart/increase-cart-flutter/",
                                 jsonEncode(<String, int>{
