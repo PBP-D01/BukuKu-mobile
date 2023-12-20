@@ -265,6 +265,10 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                 ),
                               );
 
+                              // Store values before showDialog
+                              String firstName = _firstname;
+                              String email = _email;
+
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -278,9 +282,9 @@ class _CheckoutFormPageState extends State<CheckoutFormPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              'Terima kasih sudah melakukan pembelian, $_firstname.'),
+                                              'Terima kasih sudah melakukan pembelian, $firstName.'),
                                           Text(
-                                              'Detail pembayaran dapat dilihat pada ($_email)'),
+                                              'Detail pembayaran dapat dilihat pada ($email).'),
                                         ],
                                       ),
                                     ),
