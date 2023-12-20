@@ -227,6 +227,7 @@ class BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(
@@ -315,7 +316,7 @@ class BookCard extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Review()));
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Review(id: id, book_id: product.pk)));
                 },
                 child: Text(
                   'Review',
