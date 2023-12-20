@@ -11,8 +11,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewPage extends StatefulWidget {
   final int id;
+  final int user_id;
 
-  const ReviewPage({super.key, required this.id});
+  const ReviewPage({super.key, required this.id, required this.user_id});
   @override
   // ignore: library_private_types_in_public_api
   _ReviewPageState createState() => _ReviewPageState();
@@ -45,9 +46,10 @@ class _ReviewPageState extends State<ReviewPage> {
 
   Future<void> postReview(String text, int rating) async {
     final int id = widget.id;
+    final int user_id = widget.user_id;
     final String apiUrl = 'https://bukuku-d01-tk.pbp.cs.ui.ac.id/review/api/$id/post/review/';
         //'https://bukuku-d01-tk.pbp.cs.ui.ac.id/review/api/$id/post/review/';
-    final Map<String, dynamic> requestData = {'text': text, 'rating': rating};
+    final Map<String, dynamic> requestData = {'text': text, 'rating': rating, 'user_id': user_id,};
     
     try {
       final http.Response response = await http.post(
@@ -108,11 +110,22 @@ class _ReviewPageState extends State<ReviewPage> {
             drawer: LeftDrawer(id: id),
             body: Column(
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                        ),
+                      ),
                     ],
                   ),
                 ),
